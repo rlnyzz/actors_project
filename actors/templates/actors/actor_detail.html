@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ actor.full_name }}{% endblock %}
+{% block content %}
+    <h1>{{ actor.full_name }}</h1>
+    <p>Возраст: {{ actor.age }}</p>
+    <p>Амплуа: {{ actor.role_type }}</p>
+    <p>Статус: 
+        {% if actor.is_active %}
+            <span class="status-active">Свободен</span>
+        {% else %}
+            <span class="status-inactive">Занят</span>
+        {% endif %}
+    </p>
+    <a href="{% url 'actors:list' %}">← Назад к списку</a>
+{% endblock %}

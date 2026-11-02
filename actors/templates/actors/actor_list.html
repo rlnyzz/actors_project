@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Список актеров{% endblock %}
+{% block content %}
+    <h1>Актеры</h1>
+    <p>Всего актеров: {{ actors|length }}</p>
+    {% for actor in actors %}
+        {% include "actors/includes/actor_card.html" %}
+    {% empty %}
+        <p>Актеров нет.</p>
+    {% endfor %}
+{% endblock %}

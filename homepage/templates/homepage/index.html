@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+    <h1 class="display-4">Система учета актеров</h1>
+    <p class="lead">Добро пожаловать в базу актеров.</p>
+    <a href="{% url 'actors:list' %}" class="btn btn-primary">Перейти к актерам</a>
+{% endblock %}

@@ -1,0 +1,5 @@
+<div class="actor-card">
+    <h2>{{ actor.full_name|default:"Без имени" }}</h2>
+    <p>Амплуа: {{ actor.role_type }}</p>
+    <a href="{% url 'actors:detail' actor.id %}" class="btn btn-primary">Подробнее</a>
+</div>
