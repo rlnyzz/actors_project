@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Статистика{% endblock %}
+{% block content %}
+    <h1 class="page-title">Статистика базы</h1>
+    
+    <div class="row mb-5">
+        <div class="col-md-12">
+            <div class="card bg-primary text-white shadow border-0 rounded-4 text-center p-4">
+                <h5 class="text-uppercase small fw-bold opacity-75">Всего актеров в базе</h5>
+                <h1 class="display-3 fw-bold mb-0">{{ total }}</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Левая колонка: Распределение -->
+        <div class="col-md-5 mb-4">
+            <div class="card shadow-sm border-0 rounded-4 h-100">
+                <div class="card-header bg-white border-0 pt-4 pb-0">
+                    <h4 class="fw-bold text-secondary">Распределение по амплуа</h4>
+                    <p class="text-muted small">Нажмите на амплуа, чтобы увидеть список актеров</p>
+                </div>
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush rounded-bottom-4">
+                        {% for item in stats %}
+                            <!-- Делаем ссылку с параметром role -->
+                            <a href="?role={{ item.role_type }}" 
+                               class="list-group-item list-group-item-action d-flex justify-content-between align-items-center fs-5 py-3 
+                                      {% if selected_role == item.role_type %}active{% endif %}">
+                                {{ item.role_type }}
+                                <span class="badge {% if selected_role == item.role_type %}bg-light text-dark{% else %}bg-secondary{% endif %} rounded-pill">
+                                    {{ item.count }}
+                                </span>
+                            </a>
+                        {% empty %}
+                            <div class="list-group-item">Данных нет.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Правая колонка: Список актеров по выбранному амплуа -->
+        <div class="col-md-7 mb-4">
+            {% if selected_role %}
+                <div class="card shadow-sm border-0 rounded-4 h-100">
+                    <div class="card-header bg-white border-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                        <h4 class="fw-bold text-secondary mb-0">Актеры: <span class="text-primary">{{ selected_role }}</span></h4>
+                        <a href="{% url 'actors:statistics' %}" class="btn btn-sm btn-outline-secondary rounded-pill">Сбросить</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for actor in role_actors %}
+                                <div class="col-12 mb-3">
+                                    {% include "actors/includes/actor_card.html" %}
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">Нет актеров с таким амплуа.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card shadow-sm border-0 rounded-4 h-100 d-flex align-items-center justify-content-center text-center p-5 bg-light">
+                    <div class="text-muted">
+                        <i class="bi bi-person-lines-fill display-1 mb-3 text-secondary opacity-50"></i>
+                        <h4>Выберите амплуа</h4>
+                        <p>Кликните на категорию слева, чтобы увидеть список актеров, которые в нее входят.</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

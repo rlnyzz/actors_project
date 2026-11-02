@@ -1,3 +1,85 @@
-.actor-card { border-left: 4px solid #0d6efd; margin-bottom: 10px; padding: 15px; background: #f8f9fa; }
-.status-active { color: green; font-weight: bold; }
-.status-inactive { color: red; font-weight: bold; }
+/* Общие стили */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Стили для карточек актеров */
+.actor-card {
+    border: none;
+    border-radius: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+}
+
+.actor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+/* Аватарка-заглушка в виде буквы */
+.actor-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Бейджи статуса */
+.status-active {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.status-inactive {
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+/* Красивый заголовок */
+.page-title {
+    font-weight: 700;
+    color: #2c3e50;
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+.page-title::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 50px;
+    height: 4px;
+    background: #667eea;
+    border-radius: 2px;
+}
+
+/* Стили для активного элемента списка статистики */
+.list-group-item-action.active {
+    background-color: #667eea !important;
+    border-color: #667eea !important;
+    color: white !important;
+}
+.list-group-item-action:hover {
+    background-color: #f8f9fa;
+    color: #667eea;
+    padding-left: 20px;
+    transition: all 0.2s ease;
+}

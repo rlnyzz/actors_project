@@ -6,3 +6,4 @@ urlpatterns = [
     path("", include("homepage.urls")),
     path("actors/", include("actors.urls")),
 ]
+handler404 = "homepage.views.page_not_found"

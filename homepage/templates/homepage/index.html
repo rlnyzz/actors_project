@@ -1,7 +1,15 @@
 {% extends "base.html" %}
 {% block title %}Главная{% endblock %}
 {% block content %}
-    <h1 class="display-4">Система учета актеров</h1>
-    <p class="lead">Добро пожаловать в базу актеров.</p>
-    <a href="{% url 'actors:list' %}" class="btn btn-primary">Перейти к актерам</a>
+    <div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
+        <div class="container-fluid py-5">
+            <h1 class="display-4 fw-bold text-primary">Система учета актеров</h1>
+            <p class="col-md-8 mx-auto fs-4 text-muted mt-3">
+                Удобный инструмент для ведения базы данных актеров, отслеживания их амплуа и статуса занятости.
+            </p>
+            <a href="{% url 'actors:list' %}" class="btn btn-primary btn-lg mt-4 px-5 rounded-pill shadow">
+                <i class="bi bi-person-lines-fill"></i> Перейти к актерам
+            </a>
+        </div>
+    </div>
 {% endblock %}

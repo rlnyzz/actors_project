@@ -1,11 +1,22 @@
 {% extends "base.html" %}
 {% block title %}Список актеров{% endblock %}
 {% block content %}
-    <h1>Актеры</h1>
-    <p>Всего актеров: {{ actors|length }}</p>
-    {% for actor in actors %}
-        {% include "actors/includes/actor_card.html" %}
-    {% empty %}
-        <p>Актеров нет.</p>
-    {% endfor %}
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="page-title">База актеров</h1>
+        <span class="badge bg-primary fs-6 rounded-pill px-3 py-2">
+            Всего: {{ actors|length }}
+        </span>
+    </div>
+    
+    <div class="row">
+        {% for actor in actors %}
+            <div class="col-md-6 mb-3">
+                {% include "actors/includes/actor_card.html" %}
+            </div>
+        {% empty %}
+            <div class="col-12">
+                <div class="alert alert-warning text-center">Актеров пока нет.</div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

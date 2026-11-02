@@ -1,15 +1,42 @@
 {% extends "base.html" %}
 {% block title %}{{ actor.full_name }}{% endblock %}
 {% block content %}
-    <h1>{{ actor.full_name }}</h1>
-    <p>Возраст: {{ actor.age }}</p>
-    <p>Амплуа: {{ actor.role_type }}</p>
-    <p>Статус: 
-        {% if actor.is_active %}
-            <span class="status-active">Свободен</span>
-        {% else %}
-            <span class="status-inactive">Занят</span>
-        {% endif %}
-    </p>
-    <a href="{% url 'actors:list' %}">← Назад к списку</a>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <div class="d-flex align-items-center mb-4 border-bottom pb-4">
+                        <div class="actor-avatar" style="width: 80px; height: 80px; font-size: 32px;">
+                            {{ actor.full_name|first }}
+                        </div>
+                        <div>
+                            <h1 class="mb-0 fw-bold">{{ actor.full_name }}</h1>
+                            <p class="text-muted mb-0 fs-5">{{ actor.role_type }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-sm-6 mb-3">
+                            <h6 class="text-muted text-uppercase small fw-bold">Возраст</h6>
+                            <p class="fs-5"><i class="bi bi-calendar-event text-primary"></i> {{ actor.age }} лет</p>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <h6 class="text-muted text-uppercase small fw-bold">Текущий статус</h6>
+                            <p class="fs-5">
+                                {% if actor.is_active %}
+                                    <span class="status-active"><i class="bi bi-check-circle-fill"></i> Свободен для съемок</span>
+                                {% else %}
+                                    <span class="status-inactive"><i class="bi bi-x-circle-fill"></i> Занят на проекте</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <a href="{% url 'actors:list' %}" class="btn btn-light border rounded-pill px-4">
+                        <i class="bi bi-arrow-left"></i> Назад к списку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

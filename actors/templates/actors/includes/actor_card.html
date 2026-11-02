@@ -1,5 +1,24 @@
-<div class="actor-card">
-    <h2>{{ actor.full_name|default:"Без имени" }}</h2>
-    <p>Амплуа: {{ actor.role_type }}</p>
-    <a href="{% url 'actors:detail' actor.id %}" class="btn btn-primary">Подробнее</a>
+<div class="card actor-card shadow-sm h-100">
+    <div class="card-body d-flex align-items-center">
+        <!-- Аватарка с первой буквой имени -->
+        <div class="actor-avatar">
+            {{ actor.full_name|first }}
+        </div>
+        <div class="flex-grow-1">
+            <h5 class="card-title mb-1 fw-bold">{{ actor.full_name|default:"Без имени" }}</h5>
+            <p class="card-text text-muted small mb-2">
+                <i class="bi bi-person-badge"></i> {{ actor.role_type }}
+            </p>
+            {% if actor.is_active %}
+                <span class="status-active"><i class="bi bi-check-circle-fill"></i> Свободен</span>
+            {% else %}
+                <span class="status-inactive"><i class="bi bi-x-circle-fill"></i> Занят</span>
+            {% endif %}
+        </div>
+        <div>
+            <a href="{% url 'actors:detail' actor.id %}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                Профиль
+            </a>
+        </div>
+    </div>
 </div>

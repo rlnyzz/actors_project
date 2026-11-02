@@ -1,5 +1,8 @@
 [
     {"id": 1, "full_name": "Джонни Депп", "age": 60, "role_type": "Главная роль", "is_active": true},
     {"id": 2, "full_name": "Скарлетт Йоханссон", "age": 39, "role_type": "Главная роль", "is_active": true},
-    {"id": 3, "full_name": "Джейсон Стэйтем", "age": 56, "role_type": "Эпизод", "is_active": false}
+    {"id": 3, "full_name": "Джейсон Стэйтем", "age": 56, "role_type": "Эпизод", "is_active": false},
+    {"id": 4, "full_name": "Эван Питерс", "age": 37, "role_type": "Второстепенная роль", "is_active": true},
+    {"id": 5, "full_name": "Анжелина Джоли", "age": 48, "role_type": "Главная роль", "is_active": false},
+    {"id": 6, "full_name": "Анастасия Карандашова", "age": 19, "role_type": "Начинающий актёр", "is_active": true}
 ]
