@@ -13,9 +13,10 @@
                         
                         <h6 class="text-uppercase small fw-bold text-secondary">В ролях:</h6>
                         <ul class="list-group list-group-flush mb-3">
-                            {% for actor_name in movie.actors %}
+                            <!-- Меняем переменную на actor (объект) и выводим full_name -->
+                            {% for actor in movie.actors.all %}
                                 <li class="list-group-item bg-transparent px-0 py-1">
-                                    <i class="bi bi-person-fill text-secondary"></i> {{ actor_name }}
+                                    <i class="bi bi-person-fill text-secondary"></i> {{ actor.full_name }}
                                 </li>
                             {% empty %}
                                 <li class="list-group-item bg-transparent px-0 py-1 text-muted">Актеры не указаны</li>

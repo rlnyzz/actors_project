@@ -16,13 +16,12 @@ body {
     box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
 }
 
-/* Аватарка-заглушка в виде буквы */
 .actor-avatar {
     width: 60px;
     height: 60px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    font-size: 24px;
+    font-size: 32px; /* Увеличили размер иконки (было 24px) */
     font-weight: bold;
     border-radius: 50%;
     display: flex;

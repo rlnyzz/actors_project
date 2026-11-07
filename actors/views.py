@@ -67,13 +67,8 @@ def statistics(request):
     selected_role = request.GET.get("role")
     role_actors = []
     if selected_role:
-        # 3. Исключение (exclude) - берем выбранное амплуа, 
-        # но исключаем неактивных актеров (is_active=False)
-        role_actors = Actor.objects.filter(
-            role_type=selected_role
-        ).exclude(
-            is_active=False
-        )
+        # Просто фильтруем по амплуа, чтобы цифры сходились
+        role_actors = Actor.objects.filter(role_type=selected_role)
 
     context = {
         "stats": stats,
