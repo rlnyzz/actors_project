@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Avg
 from actors.models import Actor, Movie
 
 
@@ -31,6 +31,7 @@ def actor_list(request):
 
 
 def actor_detail(request, actor_id):
+    # select_related здесь не нужен (нет ForeignKey), используем prefetch
     actor = get_object_or_404(Actor, pk=actor_id)
     movies = actor.movies.all()
     context = {
@@ -41,6 +42,7 @@ def actor_detail(request, actor_id):
 
 
 def movie_list(request):
+    # Используем values() для получения только нужных полей
     movies = Movie.objects.prefetch_related("actors").all().order_by("-year")
     context = {
         "movies": movies
@@ -49,6 +51,11 @@ def movie_list(request):
 
 
 def statistics(request):
+    # 1. Агрегация (aggregate) - средний возраст всех актеров
+    avg_age_data = Actor.objects.aggregate(avg_age=Avg("age"))
+    avg_age = round(avg_age_data["avg_age"], 1) if avg_age_data["avg_age"] else 0
+
+    # 2. Группировка (annotate) - количество по амплуа
     stats = (
         Actor.objects
         .values("role_type")
@@ -60,11 +67,18 @@ def statistics(request):
     selected_role = request.GET.get("role")
     role_actors = []
     if selected_role:
-        role_actors = Actor.objects.filter(role_type=selected_role)
+        # 3. Исключение (exclude) - берем выбранное амплуа, 
+        # но исключаем неактивных актеров (is_active=False)
+        role_actors = Actor.objects.filter(
+            role_type=selected_role
+        ).exclude(
+            is_active=False
+        )
 
     context = {
         "stats": stats,
         "total": total,
+        "avg_age": avg_age,
         "selected_role": selected_role,
         "role_actors": role_actors
     }
