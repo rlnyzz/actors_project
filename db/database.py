@@ -2,6 +2,7 @@ import sqlite3
 
 DB_PATH = "data/actors.sqlite"
 
+
 def get_connection():
     # Подключаемся к базе
     conn = sqlite3.connect(DB_PATH)

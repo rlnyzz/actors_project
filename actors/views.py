@@ -1,66 +1,71 @@
-from django.shortcuts import render
-from db.database import get_connection
+from django.shortcuts import render, get_object_or_404
+from django.core.paginator import Paginator
+from django.db.models import Count
+from actors.models import Actor, Movie
+
 
 def actor_list(request):
-    conn = get_connection()
-    # Запрос 1: получаем всех актеров
-    actors = conn.execute("SELECT * FROM actors ORDER BY full_name").fetchall()
-    conn.close()
-    return render(request, "actors/actor_list.html", {"actors": actors})
+    actors_list = Actor.objects.all()
+
+    search_query = request.GET.get("q", "").strip()
+    if search_query:
+        actors_list = actors_list.filter(full_name__icontains=search_query)
+
+    sort_param = request.GET.get("sort", "name")
+    if sort_param == "age":
+        actors_list = actors_list.order_by("-age")
+    else:
+        actors_list = actors_list.order_by("full_name")
+
+    paginator = Paginator(actors_list, 4)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "actors": page_obj,
+        "page_obj": page_obj,
+        "search_query": search_query,
+        "sort_param": sort_param,
+    }
+    return render(request, "actors/actor_list.html", context)
+
 
 def actor_detail(request, actor_id):
-    conn = get_connection()
-    # Параметризованный запрос (защита от SQL-инъекций)
-    actor = conn.execute("SELECT * FROM actors WHERE id = ?", (actor_id,)).fetchone()
-    conn.close()
-    # Если актер не найден, возвращаем 404
-    return render(request, "actors/actor_detail.html", {"actor": actor}, status=404 if actor is None else 200)
+    actor = get_object_or_404(Actor, pk=actor_id)
+    movies = actor.movies.all()
+    context = {
+        "actor": actor,
+        "movies": movies
+    }
+    return render(request, "actors/actor_detail.html", context)
+
+
+def movie_list(request):
+    movies = Movie.objects.prefetch_related("actors").all().order_by("-year")
+    context = {
+        "movies": movies
+    }
+    return render(request, "actors/movie_list.html", context)
+
 
 def statistics(request):
-    conn = get_connection()
-    
-    # Получаем статистику по амплуа (Запрос с GROUP BY)
-    stats = conn.execute("SELECT role_type, COUNT(*) as count FROM actors GROUP BY role_type").fetchall()
-    # Получаем общее количество
-    total = conn.execute("SELECT COUNT(*) as total FROM actors").fetchone()
-    
-    # Если пользователь кликнул на амплуа (есть параметр role в URL)
+    stats = (
+        Actor.objects
+        .values("role_type")
+        .annotate(count=Count("id"))
+        .order_by("-count")
+    )
+    total = Actor.objects.count()
+
     selected_role = request.GET.get("role")
     role_actors = []
-    
     if selected_role:
-        # Делаем параметризованный запрос, чтобы получить актеров этого амплуа
-        role_actors = conn.execute("SELECT * FROM actors WHERE role_type = ?", (selected_role,)).fetchall()
-        
-    conn.close()
-    
+        role_actors = Actor.objects.filter(role_type=selected_role)
+
     context = {
-        "stats": stats, 
-        "total": total["total"],
+        "stats": stats,
+        "total": total,
         "selected_role": selected_role,
         "role_actors": role_actors
     }
     return render(request, "actors/statistics.html", context)
-
-def movie_list(request):
-    conn = get_connection()
-    # Получаем фильмы
-    movies = conn.execute("SELECT * FROM movies ORDER BY year DESC").fetchall()
-    
-    # Для каждого фильма получаем список актеров (можно сделать одним запросом, но для наглядности так)
-    movies_with_actors = []
-    for movie in movies:
-        actors = conn.execute("""
-            SELECT actors.full_name 
-            FROM actors 
-            JOIN movie_actors ON actors.id = movie_actors.actor_id 
-            WHERE movie_actors.movie_id = ?
-        """, (movie["id"],)).fetchall()
-        
-        # Превращаем в словарь, добавляя актеров
-        movie_dict = dict(movie)
-        movie_dict["actors"] = [a["full_name"] for a in actors]
-        movies_with_actors.append(movie_dict)
-        
-    conn.close()
-    return render(request, "actors/movie_list.html", {"movies": movies_with_actors})
